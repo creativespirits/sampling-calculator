@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Sampling Std Drinks (AU) — 8 mL</title>
+  <style>
+    :root{
+      --bg:#0b0c0f; --text:#f3f4f6; --muted:#a8b0bf; --border:rgba(255,255,255,.10);
+      --radius:16px; --danger:#ff4d4d;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg), #07080b);
+      color: var(--text);
+      padding: 14px;
+      padding-bottom: calc(14px + env(safe-area-inset-bottom));
+    }
+    .wrap{ max-width: 980px; margin: 0 auto; }
+    .headline{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    h1{ margin:0; font-size: 18px; color: var(--muted); font-weight: 650; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px; border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      white-space:nowrap; color: var(--muted);
+      font-size: 13px;
+    }
+    .card{
+      margin-top: 12px;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+    .kpiRow{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .kpiLabel{ color: var(--muted); font-size: 13px; }
+    .kpiValue{ font-size: 44px; font-weight: 900; line-height: 1; }
+    .kpiSub{ margin-top: 8px; display:flex; gap:10px; flex-wrap:wrap; }
+    .controls{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+    button{
+      border-radius: 14px; border:1px solid var(--border);
+      background: rgba(255,255,255,.06); color: var(--text);
+      padding: 12px 14px; font-size: 15px; font-weight: 700;
+      cursor: pointer; -webkit-tap-highlight-color: transparent; user-select:none;
+    }
+    button:active{ transform: scale(.99); }
+    .btnDanger{ background: rgba(255,77,77,.12); border-color: rgba(255,77,77,.35); color: #ffd6d6; }
+    .btnGhost{ background: transparent; }
+    .grid{
+      margin-top: 14px;
+      display:grid; gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    @media (min-width: 640px){ .grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (min-width: 980px){ .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+    .pbtn{
+      text-align:left; padding: 14px; border-radius: var(--radius);
+      background: rgba(255,255,255,.06); border:1px solid var(--border);
+      min-height: 96px; display:flex; flex-direction: column; justify-content: space-between; gap:10px;
+    }
+    .pname{ font-size: 15px; font-weight: 850; line-height: 1.15; }
+    .pmeta{ color: var(--muted); font-size: 12px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .countBadge{
+      display:inline-flex; align-items:center; justify-content:center;
+      min-width: 34px; height: 28px; padding: 0 10px;
+      border-radius: 999px; border:1px solid var(--border);
+      background: rgba(0,0,0,.22);
+      font-weight: 900; font-size: 14px;
+    }
+    .warn{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,77,77,.35);
+      background: rgba(255,77,77,.10);
+      color: #ffd6d6;
+      display:none;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .breakdown{ margin-top: 14px; border-radius: var(--radius); border:1px solid var(--border); background: rgba(255,255,255,.04); padding: 12px; display:none; }
+    table{ width:100%; border-collapse: collapse; }
+    th, td{ padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,.07); }
+    th{ color: var(--muted); font-size: 12px; text-align:left; }
+    td{ font-size: 14px; }
+    td.right, th.right{ text-align:right; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="headline">
+    <h1>Sampling Standard Drinks (AU) • 8 mL</h1>
+    <div class="pill" id="tapInfo">0 samples</div>
+  </div>
+
+  <div class="card">
+    <div class="kpiRow">
+      <div>
+        <div class="kpiLabel">Total standard drinks</div>
+        <div class="kpiValue" id="totalStd">0.00</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="kpiLabel">Alcohol (grams)</div>
+        <div class="kpiValue" style="font-size:28px;" id="totalGrams">0.00</div>
+      </div>
+    </div>
+
+    <div class="kpiSub">
+      <span class="pill">AU std drink = 10 g</span>
+      <span class="pill">Density = 0.789 g/mL</span>
+      <span class="pill">Sample = 8 mL</span>
+    </div>
+
+    <div class="controls">
+      <button id="undoBtn">Undo last</button>
+      <button id="toggleBreakdownBtn" class="btnGhost">Show breakdown</button>
+      <button id="resetBtn" class="btnDanger">Reset</button>
+    </div>
+
+    <div class="warn" id="jsWarn">
+      Buttons didn’t load. This usually happens if the file is opening in a preview that doesn’t run JavaScript.
+      Try: Files → long-press file → Share → <b>Open in Safari</b>. Also ensure the file ends in <b>.html</b>.
+      Settings → Safari → Advanced → JavaScript must be ON.
+    </div>
+  </div>
+
+  <!-- Placeholder buttons exist even before JS runs -->
+  <div class="grid" id="grid">
+    <button class="pbtn" disabled><div class="pname">3 Grain Master Vodka</div><div class="pmeta"><span>40% ABV</span><span>…</span></div></button>
+    <button class="pbtn" disabled><div class="pname">The Original Gin</div><div class="pmeta"><span>40% ABV</span><span>…</span></div></button>
+    <button class="pbtn" disabled><div class="pname">Banksia Honey Gin</div><div class="pmeta"><span>40% ABV</span><span>…</span></div></button>
+    <button class="pbtn" disabled><div class="pname">Doctor’s Limoncello</div><div class="pmeta"><span>30% ABV</span><span>…</span></div></button>
+    <button class="pbtn" disabled><div class="pname">Mandorini</div><div class="pmeta"><span>30% ABV</span><span>…</span></div></button>
+    <button class="pbtn" disabled><div class="pname">Citrus Fruit Salad</div><div class="pmeta"><span>30% ABV</span><span>…</span></div></button>
+    <button class="pbtn" disabled><div class="pname">Madem Espresso</div><div class="pmeta"><span>20% ABV</span><span>…</span></div></button>
+    <button class="pbtn" disabled><div class="pname">Bushranger Bullets</div><div class="pmeta"><span>20% ABV</span><span>…</span></div></button>
+    <button class="pbtn" disabled><div class="pname">Raspberry Cream Lamington</div><div class="pmeta"><span>20% ABV</span><span>…</span></div></button>
+    <button class="pbtn" disabled><div class="pname">Salted Caramel Popcorn</div><div class="pmeta"><span>20% ABV</span><span>…</span></div></button>
+  </div>
+
+  <div class="breakdown" id="breakdownBox">
+    <table>
+      <thead><tr><th>Product</th><th class="right">ABV%</th><th class="right">Count</th><th class="right">Std</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // If this runs, we hide the warning
+  const jsWarn = document.getElementById("jsWarn");
+  // Show warning after a short delay if JS doesn't populate buttons (paranoia check)
+  setTimeout(() => {
+    const grid = document.getElementById("grid");
+    // If buttons are still disabled, we likely didn't activate them (still counts as JS not running properly)
+    const anyEnabled = Array.from(grid.querySelectorAll("button")).some(b => !b.disabled);
+    if (!anyEnabled) jsWarn.style.display = "block";
+  }, 400);
+
+  const SAMPLE_ML = 8.0;
+  const GRAMS_PER_STD_DRINK_AU = 10.0;
+  const ETHANOL_DENSITY_G_PER_ML = 0.789;
+
+  const PRODUCTS = [
+    { name: "3 Grain Master Vodka", abv: 40 },
+    { name: "The Original Gin", abv: 40 },
+    { name: "Banksia Honey Gin", abv: 40 },
+    { name: "Doctor’s Limoncello", abv: 30 },
+    { name: "Mandorini", abv: 30 },
+    { name: "Citrus Fruit Salad", abv: 30 },
+    { name: "Madem Espresso", abv: 20 },
+    { name: "Bushranger Bullets", abv: 20 },
+    { name: "Raspberry Cream Lamington", abv: 20 },
+    { name: "Salted Caramel Popcorn", abv: 20 }
+  ];
+
+  let counts = new Map(PRODUCTS.map(p => [p.name, 0]));
+  let history = [];
+  let breakdownVisible = false;
+
+  const el = (id) => document.getElementById(id);
+
+  function gramsOne(abv){ return (SAMPLE_ML * (abv/100)) * ETHANOL_DENSITY_G_PER_ML; }
+  function stdOne(abv){ return gramsOne(abv) / GRAMS_PER_STD_DRINK_AU; }
+
+  function tap(name){ counts.set(name,(counts.get(name)||0)+1); history.push(name); render(); }
+  function undo(){
+    const last = history.pop();
+    if (!last) return;
+    counts.set(last, Math.max(0,(counts.get(last)||0)-1));
+    render();
+  }
+  function resetAll(){ for(const p of PRODUCTS) counts.set(p.name,0); history=[]; render(); }
+
+  function toggleBreakdown(){
+    breakdownVisible = !breakdownVisible;
+    el("breakdownBox").style.display = breakdownVisible ? "block" : "none";
+    el("toggleBreakdownBtn").textContent = breakdownVisible ? "Hide breakdown" : "Show breakdown";
+  }
+
+  function render(){
+    // Activate and rebuild buttons (enables them)
+    const grid = el("grid");
+    grid.innerHTML = "";
+
+    let totalGrams = 0, totalStd = 0, totalCount = 0;
+
+    for(const p of PRODUCTS){
+      const c = counts.get(p.name) || 0;
+      totalCount += c;
+
+      const perStd = stdOne(p.abv);
+      totalStd += perStd * c;
+      totalGrams += gramsOne(p.abv) * c;
+
+      const btn = document.createElement("button");
+      btn.className = "pbtn";
+      btn.disabled = false;
+      btn.onclick = () => tap(p.name);
+      btn.innerHTML = `
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
+          <div class="pname">${p.name}</div>
+          <div class="countBadge">${c}</div>
+        </div>
+        <div class="pmeta">
+          <span>${p.abv}% ABV</span>
+          <span>${perStd.toFixed(3)} std / sample</span>
+        </div>
+      `;
+      grid.appendChild(btn);
+    }
+
+    el("totalStd").textContent = totalStd.toFixed(2);
+    el("totalGrams").textContent = totalGrams.toFixed(2);
+    el("tapInfo").textContent = `${totalCount} sample${totalCount === 1 ? "" : "s"}`;
+
+    const tbody = el("tbody");
+    tbody.innerHTML = "";
+    for(const p of PRODUCTS){
+      const c = counts.get(p.name) || 0;
+      const std = stdOne(p.abv) * c;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${p.name}</td><td class="right">${p.abv}</td><td class="right">${c}</td><td class="right">${std.toFixed(3)}</td>`;
+      tbody.appendChild(tr);
+    }
+  }
+
+  el("undoBtn").onclick = undo;
+  el("resetBtn").onclick = resetAll;
+  el("toggleBreakdownBtn").onclick = toggleBreakdown;
+
+  render();
+</script>
+
+<noscript>
+  <div style="margin-top:12px; padding:12px; border-radius:14px; border:1px solid rgba(255,77,77,.35); background: rgba(255,77,77,.10); color:#ffd6d6;">
+    JavaScript is off, so the calculator can’t run. Turn it on in Settings → Safari → Advanced → JavaScript.
+  </div>
+</noscript>
+
+</body>
+</html>
