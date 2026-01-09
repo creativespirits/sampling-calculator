@@ -3,97 +3,200 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Sampling Std Drinks (AU) — 8 mL</title>
+  <title>Creative Spirits – Sampling Calculator</title>
+
   <style>
     :root{
-      --bg:#0b0c0f; --text:#f3f4f6; --muted:#a8b0bf; --border:rgba(255,255,255,.10);
-      --radius:16px; --danger:#ff4d4d;
+      /* Light olive background */
+      --bg1:#D9E2C3;
+      --bg2:#CBD7B1;
+
+      /* Surfaces */
+      --card: rgba(255,255,255,.80);
+      --border: rgba(0,0,0,.12);
+
+      /* Text */
+      --text:#10130F;
+      --muted: rgba(16,19,15,.60);
+
+      /* Buttons */
+      --btnBg: rgba(255,255,255,.90);
+      --btnBorder: rgba(0,0,0,.14);
+
+      --dangerBg: rgba(176,0,32,.10);
+      --dangerBorder: rgba(176,0,32,.25);
+      --dangerText:#7a0016;
+
+      --radius:16px;
     }
+
     *{ box-sizing:border-box; }
+
     body{
-      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(180deg, var(--bg), #07080b);
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
       color: var(--text);
-      padding: 14px;
+      padding:14px;
       padding-bottom: calc(14px + env(safe-area-inset-bottom));
     }
-    .wrap{ max-width: 980px; margin: 0 auto; }
-    .headline{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-    h1{ margin:0; font-size: 18px; color: var(--muted); font-weight: 650; }
+
+    .wrap{ max-width:980px; margin:0 auto; }
+
+    /* Header */
+    .header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+
+    .logoText{
+      font-weight:900;
+      letter-spacing:.22em;
+      font-size:18px;
+      text-transform:uppercase;
+    }
+
     .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 8px 10px; border-radius: 999px;
-      background: rgba(255,255,255,.06);
+      display:inline-flex;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.7);
       border:1px solid var(--border);
-      white-space:nowrap; color: var(--muted);
-      font-size: 13px;
+      color:var(--muted);
+      font-size:13px;
+      white-space:nowrap;
     }
+
     .card{
-      margin-top: 12px;
-      background: rgba(255,255,255,.06);
+      background:var(--card);
       border:1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px;
+      border-radius:var(--radius);
+      padding:14px;
+      box-shadow:0 6px 18px rgba(0,0,0,.08);
     }
-    .kpiRow{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-    .kpiLabel{ color: var(--muted); font-size: 13px; }
-    .kpiValue{ font-size: 44px; font-weight: 900; line-height: 1; }
-    .kpiSub{ margin-top: 8px; display:flex; gap:10px; flex-wrap:wrap; }
-    .controls{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+
+    .kpiRow{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:baseline;
+    }
+
+    .kpiLabel{ font-size:13px; color:var(--muted); }
+    .kpiValue{ font-size:44px; font-weight:900; line-height:1; }
+
+    .kpiSub{
+      margin-top:8px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
     button{
-      border-radius: 14px; border:1px solid var(--border);
-      background: rgba(255,255,255,.06); color: var(--text);
-      padding: 12px 14px; font-size: 15px; font-weight: 700;
-      cursor: pointer; -webkit-tap-highlight-color: transparent; user-select:none;
+      border-radius:14px;
+      border:1px solid var(--btnBorder);
+      background:var(--btnBg);
+      padding:12px 14px;
+      font-size:15px;
+      font-weight:750;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
     }
-    button:active{ transform: scale(.99); }
-    .btnDanger{ background: rgba(255,77,77,.12); border-color: rgba(255,77,77,.35); color: #ffd6d6; }
-    .btnGhost{ background: transparent; }
+    button:active{ transform:scale(.99); }
+
+    .btnGhost{ background:transparent; }
+    .btnDanger{
+      background:var(--dangerBg);
+      border-color:var(--dangerBorder);
+      color:var(--dangerText);
+    }
+
     .grid{
-      margin-top: 14px;
-      display:grid; gap: 10px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top:14px;
+      display:grid;
+      gap:10px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
     }
-    @media (min-width: 640px){ .grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    @media (min-width: 980px){ .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    @media (min-width:640px){ .grid{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+    @media (min-width:980px){ .grid{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
 
     .pbtn{
-      text-align:left; padding: 14px; border-radius: var(--radius);
-      background: rgba(255,255,255,.06); border:1px solid var(--border);
-      min-height: 96px; display:flex; flex-direction: column; justify-content: space-between; gap:10px;
+      background:rgba(255,255,255,.85);
+      border:1px solid var(--btnBorder);
+      border-radius:var(--radius);
+      padding:14px;
+      min-height:96px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:10px;
+      text-align:left;
     }
-    .pname{ font-size: 15px; font-weight: 850; line-height: 1.15; }
-    .pmeta{ color: var(--muted); font-size: 12px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+
+    .pname{
+      font-weight:900;
+      font-size:15px;
+      line-height:1.15;
+    }
+
+    .pmeta{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:12px;
+      color:var(--muted);
+    }
+
     .countBadge{
-      display:inline-flex; align-items:center; justify-content:center;
-      min-width: 34px; height: 28px; padding: 0 10px;
-      border-radius: 999px; border:1px solid var(--border);
-      background: rgba(0,0,0,.22);
-      font-weight: 900; font-size: 14px;
+      min-width:34px;
+      height:28px;
+      padding:0 10px;
+      border-radius:999px;
+      background:rgba(0,0,0,.06);
+      border:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
     }
-    .warn{
-      margin-top: 12px;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,77,77,.35);
-      background: rgba(255,77,77,.10);
-      color: #ffd6d6;
+
+    .breakdown{
       display:none;
-      font-size: 13px;
-      line-height: 1.35;
+      margin-top:14px;
+      padding:12px;
+      background:rgba(255,255,255,.75);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
     }
-    .breakdown{ margin-top: 14px; border-radius: var(--radius); border:1px solid var(--border); background: rgba(255,255,255,.04); padding: 12px; display:none; }
-    table{ width:100%; border-collapse: collapse; }
-    th, td{ padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,.07); }
-    th{ color: var(--muted); font-size: 12px; text-align:left; }
-    td{ font-size: 14px; }
-    td.right, th.right{ text-align:right; }
+
+    table{ width:100%; border-collapse:collapse; }
+    th,td{ padding:10px 6px; border-bottom:1px solid rgba(0,0,0,.08); }
+    th{ font-size:12px; color:var(--muted); text-align:left; }
+    td.right,th.right{ text-align:right; }
   </style>
 </head>
+
 <body>
 <div class="wrap">
-  <div class="headline">
-    <h1>Sampling Standard Drinks (AU) • 8 mL</h1>
+
+  <div class="header">
+    <div class="logoText">Creative Spirits</div>
     <div class="pill" id="tapInfo">0 samples</div>
   </div>
 
@@ -110,9 +213,8 @@
     </div>
 
     <div class="kpiSub">
-      <span class="pill">AU std drink = 10 g</span>
-      <span class="pill">Density = 0.789 g/mL</span>
-      <span class="pill">Sample = 8 mL</span>
+      <span class="pill">AU standard drink = 10 g</span>
+      <span class="pill">Sample size = 8 mL</span>
     </div>
 
     <div class="controls">
@@ -120,147 +222,84 @@
       <button id="toggleBreakdownBtn" class="btnGhost">Show breakdown</button>
       <button id="resetBtn" class="btnDanger">Reset</button>
     </div>
-
-    <div class="warn" id="jsWarn">
-      Buttons didn’t load. This usually happens if the file is opening in a preview that doesn’t run JavaScript.
-      Try: Files → long-press file → Share → <b>Open in Safari</b>. Also ensure the file ends in <b>.html</b>.
-      Settings → Safari → Advanced → JavaScript must be ON.
-    </div>
   </div>
 
-  <!-- Placeholder buttons exist even before JS runs -->
-  <div class="grid" id="grid">
-    <button class="pbtn" disabled><div class="pname">3 Grain Master Vodka</div><div class="pmeta"><span>40% ABV</span><span>…</span></div></button>
-    <button class="pbtn" disabled><div class="pname">The Original Gin</div><div class="pmeta"><span>40% ABV</span><span>…</span></div></button>
-    <button class="pbtn" disabled><div class="pname">Banksia Honey Gin</div><div class="pmeta"><span>40% ABV</span><span>…</span></div></button>
-    <button class="pbtn" disabled><div class="pname">Doctor’s Limoncello</div><div class="pmeta"><span>30% ABV</span><span>…</span></div></button>
-    <button class="pbtn" disabled><div class="pname">Mandorini</div><div class="pmeta"><span>30% ABV</span><span>…</span></div></button>
-    <button class="pbtn" disabled><div class="pname">Citrus Fruit Salad</div><div class="pmeta"><span>30% ABV</span><span>…</span></div></button>
-    <button class="pbtn" disabled><div class="pname">Madem Espresso</div><div class="pmeta"><span>20% ABV</span><span>…</span></div></button>
-    <button class="pbtn" disabled><div class="pname">Bushranger Bullets</div><div class="pmeta"><span>20% ABV</span><span>…</span></div></button>
-    <button class="pbtn" disabled><div class="pname">Raspberry Cream Lamington</div><div class="pmeta"><span>20% ABV</span><span>…</span></div></button>
-    <button class="pbtn" disabled><div class="pname">Salted Caramel Popcorn</div><div class="pmeta"><span>20% ABV</span><span>…</span></div></button>
-  </div>
+  <div class="grid" id="grid"></div>
 
   <div class="breakdown" id="breakdownBox">
     <table>
-      <thead><tr><th>Product</th><th class="right">ABV%</th><th class="right">Count</th><th class="right">Std</th></tr></thead>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th class="right">ABV%</th>
+          <th class="right">Count</th>
+          <th class="right">Std</th>
+        </tr>
+      </thead>
       <tbody id="tbody"></tbody>
     </table>
   </div>
+
 </div>
 
 <script>
-  // If this runs, we hide the warning
-  const jsWarn = document.getElementById("jsWarn");
-  // Show warning after a short delay if JS doesn't populate buttons (paranoia check)
-  setTimeout(() => {
-    const grid = document.getElementById("grid");
-    // If buttons are still disabled, we likely didn't activate them (still counts as JS not running properly)
-    const anyEnabled = Array.from(grid.querySelectorAll("button")).some(b => !b.disabled);
-    if (!anyEnabled) jsWarn.style.display = "block";
-  }, 400);
-
-  const SAMPLE_ML = 8.0;
-  const GRAMS_PER_STD_DRINK_AU = 10.0;
-  const ETHANOL_DENSITY_G_PER_ML = 0.789;
-
-  const PRODUCTS = [
-    { name: "3 Grain Master Vodka", abv: 40 },
-    { name: "The Original Gin", abv: 40 },
-    { name: "Banksia Honey Gin", abv: 40 },
-    { name: "Doctor’s Limoncello", abv: 30 },
-    { name: "Mandorini", abv: 30 },
-    { name: "Citrus Fruit Salad", abv: 30 },
-    { name: "Madem Espresso", abv: 20 },
-    { name: "Bushranger Bullets", abv: 20 },
-    { name: "Raspberry Cream Lamington", abv: 20 },
-    { name: "Salted Caramel Popcorn", abv: 20 }
+  const SAMPLE_ML=8, DENSITY=0.789, STD=10;
+  const PRODUCTS=[
+    ["3 Grain Master Vodka",40],
+    ["The Original Gin",40],
+    ["Banksia Honey Gin",40],
+    ["Doctor’s Limoncello",30],
+    ["Mandorini",30],
+    ["Citrus Fruit Salad",30],
+    ["Madem Espresso",20],
+    ["Bushranger Bullets",20],
+    ["Raspberry Cream Lamington",20],
+    ["Salted Caramel Popcorn",20]
   ];
 
-  let counts = new Map(PRODUCTS.map(p => [p.name, 0]));
-  let history = [];
-  let breakdownVisible = false;
+  let counts={}, history=[], breakdown=false;
+  PRODUCTS.forEach(p=>counts[p[0]]=0);
 
-  const el = (id) => document.getElementById(id);
+  const g=a=>SAMPLE_ML*(a/100)*DENSITY;
+  const s=a=>g(a)/STD;
 
-  function gramsOne(abv){ return (SAMPLE_ML * (abv/100)) * ETHANOL_DENSITY_G_PER_ML; }
-  function stdOne(abv){ return gramsOne(abv) / GRAMS_PER_STD_DRINK_AU; }
+  const el=id=>document.getElementById(id);
 
-  function tap(name){ counts.set(name,(counts.get(name)||0)+1); history.push(name); render(); }
-  function undo(){
-    const last = history.pop();
-    if (!last) return;
-    counts.set(last, Math.max(0,(counts.get(last)||0)-1));
-    render();
-  }
-  function resetAll(){ for(const p of PRODUCTS) counts.set(p.name,0); history=[]; render(); }
-
-  function toggleBreakdown(){
-    breakdownVisible = !breakdownVisible;
-    el("breakdownBox").style.display = breakdownVisible ? "block" : "none";
-    el("toggleBreakdownBtn").textContent = breakdownVisible ? "Hide breakdown" : "Show breakdown";
-  }
+  function tap(n,a){ counts[n]++; history.push(n); render(); }
+  function undo(){ const n=history.pop(); if(!n)return; counts[n]--; render(); }
+  function resetAll(){ PRODUCTS.forEach(p=>counts[p[0]]=0); history=[]; render(); }
+  function toggle(){ breakdown=!breakdown; el("breakdownBox").style.display=breakdown?"block":"none"; }
 
   function render(){
-    // Activate and rebuild buttons (enables them)
-    const grid = el("grid");
-    grid.innerHTML = "";
-
-    let totalGrams = 0, totalStd = 0, totalCount = 0;
-
-    for(const p of PRODUCTS){
-      const c = counts.get(p.name) || 0;
-      totalCount += c;
-
-      const perStd = stdOne(p.abv);
-      totalStd += perStd * c;
-      totalGrams += gramsOne(p.abv) * c;
-
-      const btn = document.createElement("button");
-      btn.className = "pbtn";
-      btn.disabled = false;
-      btn.onclick = () => tap(p.name);
-      btn.innerHTML = `
-        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
-          <div class="pname">${p.name}</div>
+    let tg=0, ts=0, tc=0, grid="";
+    PRODUCTS.forEach(p=>{
+      const c=counts[p[0]];
+      tc+=c; ts+=s(p[1])*c; tg+=g(p[1])*c;
+      grid+=`
+      <button class="pbtn" onclick="tap('${p[0]}',${p[1]})">
+        <div style="display:flex;justify-content:space-between;gap:10px">
+          <div class="pname">${p[0]}</div>
           <div class="countBadge">${c}</div>
         </div>
-        <div class="pmeta">
-          <span>${p.abv}% ABV</span>
-          <span>${perStd.toFixed(3)} std / sample</span>
-        </div>
-      `;
-      grid.appendChild(btn);
-    }
+        <div class="pmeta"><span>${p[1]}% ABV</span><span>${s(p[1]).toFixed(3)} std</span></div>
+      </button>`;
+    });
+    el("grid").innerHTML=grid;
+    el("totalStd").textContent=ts.toFixed(2);
+    el("totalGrams").textContent=tg.toFixed(2);
+    el("tapInfo").textContent=`${tc} sample${tc===1?"":"s"}`;
 
-    el("totalStd").textContent = totalStd.toFixed(2);
-    el("totalGrams").textContent = totalGrams.toFixed(2);
-    el("tapInfo").textContent = `${totalCount} sample${totalCount === 1 ? "" : "s"}`;
-
-    const tbody = el("tbody");
-    tbody.innerHTML = "";
-    for(const p of PRODUCTS){
-      const c = counts.get(p.name) || 0;
-      const std = stdOne(p.abv) * c;
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${p.name}</td><td class="right">${p.abv}</td><td class="right">${c}</td><td class="right">${std.toFixed(3)}</td>`;
-      tbody.appendChild(tr);
-    }
+    const tbody=el("tbody");
+    tbody.innerHTML="";
+    PRODUCTS.forEach(p=>{
+      tbody.innerHTML+=`<tr><td>${p[0]}</td><td class="right">${p[1]}</td><td class="right">${counts[p[0]]}</td><td class="right">${(s(p[1])*counts[p[0]]).toFixed(3)}</td></tr>`;
+    });
   }
 
-  el("undoBtn").onclick = undo;
-  el("resetBtn").onclick = resetAll;
-  el("toggleBreakdownBtn").onclick = toggleBreakdown;
-
+  el("undoBtn").onclick=undo;
+  el("resetBtn").onclick=resetAll;
+  el("toggleBreakdownBtn").onclick=toggle;
   render();
 </script>
-
-<noscript>
-  <div style="margin-top:12px; padding:12px; border-radius:14px; border:1px solid rgba(255,77,77,.35); background: rgba(255,77,77,.10); color:#ffd6d6;">
-    JavaScript is off, so the calculator can’t run. Turn it on in Settings → Safari → Advanced → JavaScript.
-  </div>
-</noscript>
-
 </body>
 </html>
