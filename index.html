@@ -53,9 +53,15 @@
       margin-bottom:10px;
     }
 
-    .logo{
+    .logo-container{
       width:20%;
       display:inline-block;
+    }
+
+    .logo-container img{
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
     }
 
     .pill{
@@ -194,7 +200,7 @@
 <div class="wrap">
 
   <div class="header">
-    <div class="logo">
+    <div class="logo-container">
       <img src="assets/logo.png" alt="Creative Spirits Logo">
     </div>
     <div class="pill" id="tapInfo">0 samples</div>
